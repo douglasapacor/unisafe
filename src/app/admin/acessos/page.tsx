@@ -16,7 +16,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
-import { Field, FieldGroup } from "@/src/components/ui/field";
+import { Field, FieldGroup, FieldLabel } from "@/src/components/ui/field";
 import { Input } from "@/src/components/ui/input";
 import {
   Table,
@@ -30,9 +30,6 @@ import {
 import { Edit, EllipsisIcon, Trash, User2 } from "lucide-react";
 
 export default function Page() {
-  function algo() {
-    console.log("asdasd");
-  }
   return (
     <div className="flex w-full flex-col gap-8">
       <div className="w-full">
@@ -125,7 +122,12 @@ export default function Page() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4">
-        <FieldGroup></FieldGroup>
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="NomeField">Nome</FieldLabel>
+            <Input id="NomeField" required type="text" />
+          </Field>
+        </FieldGroup>
       </div>
     </div>
   );
