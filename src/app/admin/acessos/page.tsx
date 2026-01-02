@@ -30,6 +30,9 @@ import {
 import { Edit, EllipsisIcon, Trash, User2 } from "lucide-react";
 
 export default function Page() {
+  function algo() {
+    console.log("asdasd");
+  }
   return (
     <div className="flex w-full flex-col gap-8">
       <div className="w-full">
