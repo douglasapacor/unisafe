@@ -17,7 +17,7 @@ const accessSchema = schema(
   },
 );
 
-export async function getActionModel() {
+export async function getAccessModel() {
   const papr = await getPapr();
   const access = papr.model("access", accessSchema);
   return access;

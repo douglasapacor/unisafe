@@ -1,4 +1,4 @@
-import { Settings } from "lucide-react";
+import { Settings, Shield, SquareFunction, User } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -11,21 +11,26 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "./ui/sidebar";
+import { ModeToggle } from "./ModeToggle";
 
-export function ClienteSidebar() {
+export function AppSidebar() {
   return (
     <Sidebar>
-      <SidebarHeader></SidebarHeader>
+      <SidebarHeader>
+        <div className="flex w-full items-center justify-center p-3 text-center">
+          UNISAFE
+        </div>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>cliente</SidebarGroupLabel>
+          <SidebarGroupLabel>Segurança</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href={"/algo"}>
-                    <Settings />
-                    <span>{"titulo"}</span>
+                  <a href={"/admin/usuario"}>
+                    <User />
+                    <span>Usuários</span>
                   </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -33,7 +38,11 @@ export function ClienteSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+        <div className="flex w-full items-center justify-end">
+          <ModeToggle />
+        </div>
+      </SidebarFooter>
     </Sidebar>
   );
 }

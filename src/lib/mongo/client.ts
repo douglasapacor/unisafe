@@ -10,10 +10,12 @@ export async function getMongoClient(): Promise<MongoClient> {
     return global._mongoClient;
   }
 
-  const uri =
-    process.env.NODE_ENV === "development"
-      ? await getMemoryMongoUri()
-      : process.env.MONGODB_URI!;
+  // const uri =
+  //   process.env.NODE_ENV === "development"
+  //     ? await getMemoryMongoUri()
+  //     : process.env.MONGODB_URI!;
+
+  const uri = process.env.MONGODB_URI!;
 
   const client = new MongoClient(uri);
 
