@@ -278,7 +278,14 @@ export default function Page() {
                 <TableRow>
                   <TableCell colSpan={12}>
                     <div className="flex w-full items-center justify-end gap-6 py-1">
-                      <Button variant="ghost">
+                      <Button
+                        variant="ghost"
+                        onClick={() => {
+                          setPage((p) => {
+                            return p <= 1 ? 1 : p;
+                          });
+                        }}
+                      >
                         <ChevronLeft />
                       </Button>
 
@@ -292,7 +299,12 @@ export default function Page() {
                         }}
                       />
 
-                      <Button variant="ghost">
+                      <Button
+                        variant="ghost"
+                        onClick={() => {
+                          setPage((p) => p + 1);
+                        }}
+                      >
                         <ChevronRight />
                       </Button>
                     </div>

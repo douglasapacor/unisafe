@@ -34,7 +34,7 @@ export function Combobox({ list, value, onChange }: ComboboxProps) {
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[120px] p-0">
+      <PopoverContent className="w-[200px] p-0">
         <Command>
           <CommandList>
             <CommandEmpty>No framework found.</CommandEmpty>
