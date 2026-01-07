@@ -6,7 +6,8 @@ const accessionsSchema = schema(
     client: types.objectId({ required: true }),
     content: types.array(
       types.object({
-        product: types.objectId(),
+        active: types.boolean({ required: true }),
+        product: types.objectId({ required: true }),
         accessiontype: types.string({ enum: ["month", "signature"] }),
         validity: types.object(
           {
@@ -27,11 +28,14 @@ const accessionsSchema = schema(
         ),
       }),
     ),
+    active: types.boolean({ required: true }),
+    billingDate: types.date({ required: true }),
   },
   {
     timestamps: true,
     defaults: {
       content: [],
+      active: true,
     },
   },
 );

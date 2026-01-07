@@ -11,7 +11,7 @@ const clientsSchema = schema(
     cell: types.string({ required: false, minLength: 11, maxLength: 11 }),
     tel: types.string({ required: false, minLength: 10, maxLength: 10 }),
     active: types.boolean({ required: true }),
-    endereco: types.objectId({ required: true }),
+    adress: types.objectId({ required: true }),
   },
   {
     timestamps: true,

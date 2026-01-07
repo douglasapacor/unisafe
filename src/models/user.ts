@@ -3,23 +3,23 @@ import { schema, types } from "papr";
 
 const usersSchema = schema(
   {
-    name: types.string({ required: true }),
-    cpf: types.string({ required: true, minLength: 11, maxLength: 11 }),
-    cel: types.string({ required: true, minLength: 11, maxLength: 11 }),
-    email: types.string({ required: true, minLength: 7, maxLength: 200 }),
+    person: types.objectId({ required: true }),
     password: types.string({ required: true, minLength: 3, maxLength: 500 }),
-    active: types.boolean({ required: true }),
-    envirorment: types.array(types.objectId({ required: true })),
+    envirorment: types.objectId({ required: true }),
     securityPolicy: types.array(types.objectId({ required: true })),
-    endereco: types.objectId({ required: true }),
-    code: types.objectId({ required: false, minLength: 6, maxLength: 6 }),
+    confirmationCode: types.objectId({
+      required: false,
+      minLength: 6,
+      maxLength: 6,
+    }),
+    active: types.boolean({ required: true }),
     needUpdatePassword: types.boolean({ required: true }),
   },
   {
     timestamps: true,
     defaults: {
       active: true,
-      needUpdatePassword: true,
+      needUpdatePassword: false,
     },
   },
 );

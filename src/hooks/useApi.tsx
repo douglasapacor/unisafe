@@ -23,10 +23,10 @@ export function useApi<T, K>({ url, method }: { url: string; method: string }) {
       setError(null);
       setIsPending(true);
 
+      let res: AxiosResponse<K, unknown, unknown>;
+
       if (args) {
         const finalUrl = buildstring(url, args);
-
-        let res: AxiosResponse<K, unknown, unknown>;
 
         if (
           method.toLowerCase() === "get" ||
