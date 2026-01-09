@@ -8,4 +8,9 @@ const saveAccess = {
   method: "POST",
 };
 
-export default { getAccess, saveAccess };
+const deletAccess = {
+  url: "/access/{:id}/delete",
+  method: "DELETE",
+};
+
+export default { getAccess, saveAccess, deletAccess };

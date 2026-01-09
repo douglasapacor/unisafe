@@ -1,6 +1,16 @@
 "use client";
 import { AutoDismissAlert } from "@/src/components/AutoDismissAlert";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/src/components/ui/alert-dialog";
+import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -93,6 +103,8 @@ type saveAccessResponse = {
 
 export default function Page() {
   const [alertOpen, setAlertOpen] = useState(false);
+  const [deleteAlert, setDeleteAlert] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
   const [alertType, setAlertType] = useState<
     "success" | "error" | "warning" | "info"
   >("info");
@@ -106,6 +118,16 @@ export default function Page() {
   const { execute, isPending, data } = useApi<Input, saveAccessResponse>(
     Router.saveAccess,
   );
+
+  const { execute: delExecute } = useApi<
+    {
+      id: string;
+    },
+    {
+      success: boolean;
+      data: { deletedId: string };
+    }
+  >(Router.deletAccess);
 
   const emptyRows =
     10 - (accessData && accessData.data ? accessData.data.list.length : 0);
@@ -144,6 +166,17 @@ export default function Page() {
         setValue("icon", data.data.icon);
         setValue("active", data.data.active);
       });
+  };
+
+  const deleteThis = async () => {
+    if (deleteId) {
+      await delExecute({ id: deleteId });
+
+      setDeleteId(null);
+      setDeleteAlert(false);
+
+      await accessExecute({ page, limit: 10 });
+    }
   };
 
   useEffect(() => {
@@ -253,7 +286,12 @@ export default function Page() {
                                     <Edit />
                                   </DropdownMenuShortcut>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={() => {
+                                    setDeleteId(item._id);
+                                    setDeleteAlert(true);
+                                  }}
+                                >
                                   Excluir
                                   <DropdownMenuShortcut>
                                     <Delete />
@@ -277,27 +315,17 @@ export default function Page() {
               <TableFooter>
                 <TableRow>
                   <TableCell colSpan={12}>
-                    <div className="flex w-full items-center justify-end gap-6 py-1">
+                    <div className="flex w-full items-center justify-between gap-6 py-1">
                       <Button
                         variant="ghost"
                         onClick={() => {
                           setPage((p) => {
-                            return p <= 1 ? 1 : p;
+                            return p <= 0 ? 0 : p - 1;
                           });
                         }}
                       >
                         <ChevronLeft />
                       </Button>
-
-                      <Input
-                        value={page}
-                        type="number"
-                        min={1}
-                        className="w-[60px]"
-                        onChange={(e) => {
-                          setPage(+e.target.value);
-                        }}
-                      />
 
                       <Button
                         variant="ghost"
@@ -400,6 +428,35 @@ export default function Page() {
           type: alertType,
         }}
       />
+
+      <AlertDialog open={deleteAlert}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              <div className="flex w-full gap-3">
+                <X className="stroke-red-500" />
+                Confirmação de exclusão
+              </div>
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir esse acesso.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={() => {
+                setDeleteId(null);
+                setDeleteAlert(false);
+              }}
+            >
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={deleteThis}>
+              Confirmar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

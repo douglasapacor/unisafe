@@ -1,3 +1,4 @@
+"use client";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -18,10 +19,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/src/components/ui/table";
-import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, Search } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  const route = useRouter();
   const emptyRows = 10;
   return (
     <div className="container mx-auto px-4">
@@ -44,6 +47,15 @@ export default function Page() {
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
+        </div>
+
+        <div className="flex w-full items-center justify-end">
+          <Button
+            variant="ghost"
+            onClick={() => route.push("/politicas/novos")}
+          >
+            <Plus />
+          </Button>
         </div>
 
         <div className="flex items-end gap-3">

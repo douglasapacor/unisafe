@@ -15,10 +15,6 @@ export async function seed() {
           name: "Operação",
           active: true,
         },
-        {
-          name: "Moradia",
-          active: true,
-        },
       ]);
     }
   } catch (error) {

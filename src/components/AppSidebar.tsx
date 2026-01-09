@@ -1,4 +1,4 @@
-import { User } from "lucide-react";
+import { Siren, User } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -28,9 +28,17 @@ export function AppSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href={"/admin/usuario"}>
+                  <a href={"/acessos"}>
                     <User />
-                    <span>Usuários</span>
+                    <span>Acessos</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <a href={"/politicas"}>
+                    <Siren />
+                    <span>Politicas</span>
                   </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>
