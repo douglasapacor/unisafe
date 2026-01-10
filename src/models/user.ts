@@ -4,7 +4,7 @@ import { schema, types } from "papr";
 const usersSchema = schema(
   {
     person: types.objectId({ required: true }),
-    password: types.string({ required: true, minLength: 3, maxLength: 500 }),
+    password: types.string({ required: false, maxLength: 500 }),
     envirorment: types.objectId({ required: true }),
     securityPolicy: types.array(types.objectId({ required: true })),
     confirmationCode: types.objectId({
@@ -13,7 +13,6 @@ const usersSchema = schema(
       maxLength: 6,
     }),
     active: types.boolean({ required: true }),
-    needUpdatePassword: types.boolean({ required: true }),
   },
   {
     timestamps: true,

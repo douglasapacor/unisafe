@@ -1,4 +1,4 @@
-import { Siren, User } from "lucide-react";
+import { Building2, Siren, User, User2 } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -39,6 +39,22 @@ export function AppSidebar() {
                   <a href={"/politicas"}>
                     <Siren />
                     <span>Politicas</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <a href={"/usuarios"}>
+                    <User2 />
+                    <span>Usuários</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <a href={"/cliente"}>
+                    <Building2 />
+                    <span>Clientes</span>
                   </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>

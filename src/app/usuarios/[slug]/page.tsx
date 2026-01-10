@@ -13,7 +13,12 @@ import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
 import { MultiCombobox } from "@/src/components/ui/multi-combobox";
 import { Switch } from "@/src/components/ui/switch";
-import { Save } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/src/components/ui/tooltip";
+import { ArrowBigLeft, Eraser, Plus, Save, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -63,6 +68,39 @@ export default function Page() {
           </Breadcrumb>
         </div>
 
+        <div className="flex items-center justify-end gap-6">
+          <Button variant="outline" className="flex gap-3">
+            <ArrowBigLeft className="stroke-amber-500" />
+            Voltar
+          </Button>
+
+          {!isNew && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline">
+                  <Eraser />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Reiniciar senha</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+
+          {!isNew && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline">
+                  <Trash2 className="stroke-red-500" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Excluir usuário</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+        </div>
+
         <div>
           <form
             className="grid grid-cols-1 gap-6 md:grid-cols-12"
@@ -81,8 +119,8 @@ export default function Page() {
             </Field>
 
             <Field className="col-span-4">
-              <FieldLabel htmlFor="userEmail">email</FieldLabel>
-              <Input id="userEmail" />
+              <FieldLabel htmlFor="userCell">celular</FieldLabel>
+              <Input id="userCell" />
             </Field>
 
             <Field className="col-span-2 flex justify-center">

@@ -19,6 +19,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/src/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/src/components/ui/tooltip";
 import { ChevronLeft, ChevronRight, Plus, Search } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -50,12 +55,16 @@ export default function Page() {
         </div>
 
         <div className="flex w-full items-center justify-end">
-          <Button
-            variant="ghost"
-            onClick={() => route.push("/politicas/novos")}
-          >
-            <Plus />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link href="/politicas/novo">
+                <Plus />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Nova política</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
 
         <div className="flex items-end gap-3">

@@ -1,4 +1,5 @@
 "use client";
+import { AutoDismissAlert } from "@/src/components/AutoDismissAlert";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -21,13 +22,21 @@ import {
   SelectValue,
 } from "@/src/components/ui/select";
 import { Switch } from "@/src/components/ui/switch";
-import { Save } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/src/components/ui/tooltip";
+import { useApi } from "@/src/hooks/useApi";
+import Router from "@/src/Router";
+import { Save, Trash } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
 type Input = {
+  _id?: string;
   name: string;
   environment: string;
   active: boolean;
@@ -37,13 +46,20 @@ type Input = {
 export default function Page() {
   const params = useParams();
   const slug = params.slug as string;
-  const isNew = ["novo", "nova", "new"].includes(slug);
+  const isNew = ["novo", "nova", "new", "novos", "novas"].includes(slug);
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertType, setAlertType] = useState<
+    "success" | "error" | "warning" | "info"
+  >("info");
+  const [alertTitle, setAlertTitle] = useState("");
+  const [alertText, setAlertText] = useState("");
   const [envirorments, setEnvirorments] = useState<
     { name: string; _id: string }[]
   >([]);
   const [access, setAccess] = useState<{ value: string; label: string }[]>([]);
-  const { control, register, handleSubmit } = useForm<Input>({
+  const { control, register, handleSubmit, setValue } = useForm<Input>({
     defaultValues: {
+      _id: "",
       name: "",
       environment: "",
       active: true,
@@ -51,8 +67,56 @@ export default function Page() {
     },
   });
 
+  const { execute, isPending, data } = useApi<
+    Input,
+    {
+      success: boolean;
+      data: {
+        access?: string[] | undefined;
+        name: string;
+        active: boolean;
+        envirorment: string;
+        _id: string;
+      };
+      message?: string;
+    }
+  >(Router.savePolicies);
+
   const onSubmit: SubmitHandler<Input> = async (formData) => {
-    console.info(formData);
+    await execute(formData);
+  };
+
+  useEffect(() => {
+    if (data) {
+      setValue("_id", data.data._id);
+
+      if (data.message) {
+        if (data.success) {
+          setAlertTitle("Sucesso.");
+          setAlertType("success");
+        } else {
+          setAlertTitle("Error");
+          setAlertType("error");
+        }
+
+        setAlertText(data.message);
+      }
+    }
+  }, [data]);
+
+  const getById = async () => {
+    if (!isNew) {
+      fetch(`/api/policies/${slug}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.data._d) setValue("_id", data.data._d);
+
+          setValue("name", data.data.name);
+          setValue("active", data.data.active);
+          setValue("environment", data.data.envirorment);
+          setValue("access", data.data.access);
+        });
+    }
   };
 
   useEffect(() => {
@@ -67,6 +131,7 @@ export default function Page() {
         .then((data) => {
           setAccess(data.data);
         }),
+      getById(),
     ]);
   }, []);
 
@@ -95,14 +160,39 @@ export default function Page() {
           </Breadcrumb>
         </div>
 
+        <div className="flex w-full items-end justify-end">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                disabled={isNew}
+                onClick={() => {
+                  console.info("asdasdasd");
+                }}
+              >
+                <Trash className="stroke-red-500" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Excluir política</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+
         <div>
           <form
             className="grid grid-cols-1 gap-6 md:grid-cols-12"
             onSubmit={handleSubmit(onSubmit)}
           >
+            <Input type="hidden" {...register("_id")} />
+
             <Field className="col-span-9">
               <FieldLabel htmlFor="politicName">nome</FieldLabel>
-              <Input id="politicName" {...register("name")} />
+              <Input
+                id="politicName"
+                {...register("name")}
+                disabled={isPending}
+              />
             </Field>
 
             <Field className="col-span-2">
@@ -110,6 +200,7 @@ export default function Page() {
               <Controller
                 name="environment"
                 control={control}
+                disabled={isPending}
                 render={({ field }) => {
                   return (
                     <Select value={field.value} onValueChange={field.onChange}>
@@ -138,6 +229,7 @@ export default function Page() {
               <Controller
                 name="active"
                 control={control}
+                disabled={isPending}
                 render={({ field }) => (
                   <div className="flex w-full justify-end gap-3">
                     <Switch
@@ -155,22 +247,31 @@ export default function Page() {
             <div className="col-span-12">
               <Controller
                 name="access"
+                disabled={isPending}
                 control={control}
                 render={({ field }) => {
                   return (
-                    <MultiCombobox
-                      value={field.value}
-                      onChange={field.onChange}
-                      options={access}
-                      placeholder="Selecione os acessos permitidos para essa política"
-                    />
+                    <div className="flex flex-col gap-3">
+                      <Label>acessos</Label>
+                      <MultiCombobox
+                        value={field.value}
+                        onChange={field.onChange}
+                        options={access}
+                        placeholder="Selecione os acessos permitidos para essa política"
+                      />
+                    </div>
                   );
                 }}
               />
             </div>
 
             <div className="col-span-12">
-              <Button type="submit" variant="outline" className="w-full">
+              <Button
+                disabled={isPending}
+                type="submit"
+                variant="outline"
+                className="w-full"
+              >
                 Salvar
                 <Save />
               </Button>
@@ -178,6 +279,15 @@ export default function Page() {
           </form>
         </div>
       </div>
+      <AutoDismissAlert
+        open={alertOpen}
+        onClose={() => setAlertOpen(false)}
+        header={alertTitle}
+        text={alertText}
+        options={{
+          type: alertType,
+        }}
+      />
     </div>
   );
 }

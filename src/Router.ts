@@ -13,4 +13,9 @@ const deletAccess = {
   method: "DELETE",
 };
 
-export default { getAccess, saveAccess, deletAccess };
+const savePolicies = {
+  url: "/policies/save",
+  method: "POST",
+};
+
+export default { getAccess, saveAccess, deletAccess, savePolicies };
